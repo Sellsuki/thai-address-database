@@ -8,7 +8,7 @@
 
 ## Original Version
 
-**database** และ function **preprocess()** จาก ตั้นฉบับ version **1.5.1**
+**database** และ function **preprocess()** จาก ต้นฉบับ version **1.5.1**
 
 [[Commit: 4e5f496](https://github.com/earthchie/jquery.Thailand.js/commit/4e5f496f5db064bf56c163514167796816d9e357)]
 
@@ -56,7 +56,7 @@ export default {
 ```
 
 ## Database & Migration
-ใน /database/raw_database มีไฟล์ฐานข้อมูลที่เป็น excel ชื่อว่า database.xlxs สามารถอัปเดทฐานข้อมูลได้ในนี้โดยเมื่ออัปเดตเรียบร้อยก็รันคำสั่ง
+ใน /database/raw_database มีไฟล์ฐานข้อมูลที่เป็น excel ชื่อว่า database.xlsx สามารถอัปเดทฐานข้อมูลได้ในนี้โดยเมื่ออัปเดตเรียบร้อยก็รันคำสั่ง
 
 ```bash
 npm run migrate
@@ -64,7 +64,7 @@ npm run migrate
 
 ตัว script จะแปลงไฟล์ database.xlsx ไปเป็น /database/db.json ให้ (ยังไม่ support geodb)
 
-ปล.ข้อควรระวังคือ file excel จะต้องเป็น xlxs เสมอ
+ปล.ข้อควรระวังคือ file excel จะต้องเป็น xlsx เสมอ
 
 ## Todos
 
