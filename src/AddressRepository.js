@@ -1,6 +1,9 @@
 class AddressRepository {
-  constructor (db) {
-    this.db = db
+  database = null
+  maxResult = 20
+
+  constructor (database) {
+    this.database = database
 
     this.resolveResultbyField = this.resolveResultbyField.bind(this)
     this.searchByDistrict = this.searchByDistrict.bind(this)
@@ -11,21 +14,25 @@ class AddressRepository {
 
   resolveResultbyField (type, searchStr, maxResult) {
     searchStr = searchStr.toString().trim()
+
     if (searchStr === '') {
       return []
     }
+
     if (!maxResult) {
-      maxResult = 20
+      maxResult = this.database
     }
+
     let possibles = []
+
     try {
-      possibles = this.db.filter(item => {
-        let regex = new RegExp(searchStr, 'g')
-        return (item[type] || '').toString().match(regex)
-      }).slice(0, maxResult)
+      possibles = this.database
+        .filter(item => (item[type] || '').toString().match(new RegExp(searchStr, 'g')))
+        .slice(0, maxResult)
     } catch (e) {
       return []
     }
+
     return possibles
   }
 
