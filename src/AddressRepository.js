@@ -36,6 +36,11 @@ class AddressRepository {
     return possibles
   }
 
+  // get all province
+  getAllProvince () {
+    return [ ...this.database.map(item => item.province) ]
+  }
+
   searchByDistrict (searchStr, maxResult) {
     return this.resolveResultbyField('district', searchStr, maxResult)
   }
