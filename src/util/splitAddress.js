@@ -20,14 +20,14 @@ exports.prepareAddress = function (address, zip) {
 }
 
 exports.getBestResult = function (zip, address) {
-  let searchResult = lib.searchAddressByZipcode(zip)
+  const searchResult = lib.searchAddressByZipcode(zip)
   searchResult.forEach((element, index) => {
-    let district = address.indexOf(element.district)
+    const district = address.indexOf(element.district)
     let next = (district !== -1) ? district + 1 : 0
-    let amphoe = address.indexOf(element.amphoe, next)
+    const amphoe = address.indexOf(element.amphoe, next)
     next = (amphoe !== -1) ? amphoe + 1 : next + 1
-    let province = address.indexOf(element.province, next)
-    let point = [district, amphoe, province].filter(el => el >= 0).length
+    const province = address.indexOf(element.province, next)
+    const point = [district, amphoe, province].filter(el => el >= 0).length
     searchResult[index].point = point
   })
   searchResult.sort((a, b) => b.point - a.point)
@@ -39,18 +39,18 @@ exports.getBestResult = function (zip, address) {
 }
 
 exports.cleanupAddress = function (address, result) {
-  let regexDistrict = new RegExp(`\\s${result.district}`, 'g')
-  let findDistrict = regexDistrict.exec(address)
+  const regexDistrict = new RegExp(`\\s${result.district}`, 'g')
+  const findDistrict = regexDistrict.exec(address)
   if (findDistrict) {
     address = address.replace(findDistrict[0], '')
   }
-  let regexAmphoe = new RegExp(`\\s${result.amphoe}|เมือง`, 'g')
-  let findAmphoe = regexAmphoe.exec(address)
+  const regexAmphoe = new RegExp(`\\s${result.amphoe}|เมือง`, 'g')
+  const findAmphoe = regexAmphoe.exec(address)
   if (findAmphoe) {
     address = address.replace(findAmphoe[0], '')
   }
-  let regexProvince = new RegExp(`\\s${result.province}`, 'g')
-  let findProvince = regexProvince.exec(address)
+  const regexProvince = new RegExp(`\\s${result.province}`, 'g')
+  const findProvince = regexProvince.exec(address)
   if (findProvince) {
     address = address.replace(findProvince[0], '')
   }
