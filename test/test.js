@@ -1,39 +1,39 @@
 'use strict'
 
-let mocha = require('mocha')
-let describe = mocha.describe
-let it = mocha.it
-let expect = require('chai').expect
-let db = require('../src')
+const mocha = require('mocha')
+const describe = mocha.describe
+const it = mocha.it
+const expect = require('chai').expect
+const db = require('../src/index.js')
 
 describe('More then 1 zipcode District', function () {
   it('District ปราณบุรี have 2 result', function () {
-    let result = db.searchAddressByDistrict('ปราณบุรี')
+    const result = db.searchAddressByDistrict('ปราณบุรี')
     expect(result.length).to.equal(2)
     expect(result.filter((item) => item.province === 'ประจวบคีรีขันธ์').length).to.equal(2)
   })
   it('District วังก์พง have 2 result', function () {
-    let result = db.searchAddressByDistrict('วังก์พง')
+    const result = db.searchAddressByDistrict('วังก์พง')
     expect(result.length).to.equal(2)
     expect(result.filter((item) => item.province === 'ประจวบคีรีขันธ์').length).to.equal(2)
   })
   it('District หนองตาแต้ม have 2 result', function () {
-    let result = db.searchAddressByDistrict('หนองตาแต้ม')
+    const result = db.searchAddressByDistrict('หนองตาแต้ม')
     expect(result.length).to.equal(2)
     expect(result.filter((item) => item.province === 'ประจวบคีรีขันธ์').length).to.equal(2)
   })
   it('District เขาจ้าว have 2 result', function () {
-    let result = db.searchAddressByDistrict('เขาจ้าว')
+    const result = db.searchAddressByDistrict('เขาจ้าว')
     expect(result.length).to.equal(2)
     expect(result.filter((item) => item.province === 'ประจวบคีรีขันธ์').length).to.equal(2)
   })
   it('District สามร้อยยอด have 2 result', function () {
-    let result = db.searchAddressByDistrict('สามร้อยยอด')
+    const result = db.searchAddressByDistrict('สามร้อยยอด')
     expect(result.length).to.equal(2)
     expect(result.filter((item) => item.province === 'ประจวบคีรีขันธ์').length).to.equal(2)
   })
   it('District เขาน้อย have 2 result', function () {
-    let result = db.searchAddressByDistrict('เขาน้อย')
+    const result = db.searchAddressByDistrict('เขาน้อย')
     expect(result.filter((item) => item.province === 'ประจวบคีรีขันธ์').length).to.equal(2)
   })
 })
@@ -98,8 +98,8 @@ describe('#search', function () {
 
 describe('Function splitAddress', function () {
   it('Shoud split address without touching original address', function () {
-    let addr = `126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ ปากเกร็ด ปากเกร็ด นนทบุรี Thailand 11120`
-    let result = db.splitAddress(addr)
+    const addr = '126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ ปากเกร็ด ปากเกร็ด นนทบุรี Thailand 11120'
+    const result = db.splitAddress(addr)
     expect(result).to.deep.equal({
       'address': '126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์',
       'amphoe': 'ปากเกร็ด',
@@ -108,31 +108,31 @@ describe('Function splitAddress', function () {
       'zipcode': '11120'
     })
 
-    expect(addr).to.equal(`126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ ปากเกร็ด ปากเกร็ด นนทบุรี Thailand 11120`)
+    expect(addr).to.equal('126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ ปากเกร็ด ปากเกร็ด นนทบุรี Thailand 11120')
   })
 
   it('Shoud return null when cant split address', function () {
-    let addr = `126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์`
-    let result = db.splitAddress(addr)
+    const addr = '126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์'
+    const result = db.splitAddress(addr)
     expect(result).to.be.null
 
-    expect(addr).to.equal(`126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์`)
+    expect(addr).to.equal('126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์')
   })
 
   it('Shoud return null when cant split address', function () {
-    let addr = `126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ ปากเกร็ด ปากเกร็ด Thailand 11120`
-    let result = db.splitAddress(addr)
+    const addr = '126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ ปากเกร็ด ปากเกร็ด Thailand 11120'
+    const result = db.splitAddress(addr)
     expect(result).to.be.null
 
-    expect(addr).to.equal(`126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ ปากเกร็ด ปากเกร็ด Thailand 11120`)
+    expect(addr).to.equal('126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ ปากเกร็ด ปากเกร็ด Thailand 11120')
   })
 
   it('Shoud return null when cant split address', function () {
-    let addr = `126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ Thailand 11120`
-    let result = db.splitAddress(addr)
+    const addr = '126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ Thailand 11120'
+    const result = db.splitAddress(addr)
     console.log(result)
     expect(result).to.be.null
 
-    expect(addr).to.equal(`126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ Thailand 11120`)
+    expect(addr).to.equal('126/548 ถ.สุขาประชาสรรค์ ม.การเคหะนนท์ Thailand 11120')
   })
 })

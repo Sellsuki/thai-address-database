@@ -1,21 +1,21 @@
 {
   "name": "thai-address-database",
   "version": "0.0.27",
-  "description": "",
+  "description": "Thai Address Database for managing addresses in applications.",
   "main": "lib/index.js",
   "engines": {
-    "node": ">=4.2.4"
+    "node": ">=12.0.0"
   },
   "babel": {
     "presets": [
-      "es2015"
+      "@babel/preset-env"
     ]
   },
   "scripts": {
     "migrate": "node ./database/migrate/index.js",
     "test": "mocha --reporter spec",
-    "prepublish": "node_modules/babel-cli/bin/babel.js src --out-dir lib",
-    "lint": "eslint --ext .js src test",
+    "prepublish": "babel src --out-dir lib",
+    "lint": "eslint src test",
     "deploy": "npm version patch && npm publish"
   },
   "repository": {
@@ -29,20 +29,30 @@
   },
   "homepage": "https://github.com/Sellsuki/thai-address-database#readme",
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
-    "babel-eslint": "^7.1.1",
-    "babel-preset-es2015": "^6.24.1",
-    "chai": "^4.1.0",
-    "eslint": "^3.19.0",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.13.0",
+    "chai": "^4.5.0",
+    "eslint": "^9.13.0",
     "eslint-config-standard": "^6.2.1",
-    "eslint-friendly-formatter": "^3.0.0",
-    "mocha": "^3.4.2"
+    "eslint-friendly-formatter": "^3.0.0"
   },
   "dependencies": {
-    "convert-excel-to-json": "^1.2.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "wordcut": "^0.8.1"
+    "@babel/cli": "^7.25.9",
+    "@babel/core": "^7.26.0",
+    "@babel/eslint-parser": "^7.25.9",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/register": "^7.25.9",
+    "@babel/runtime": "^7.26.0",
+    "core-js": "^3.38.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "mkdirp": "^3.0.1",
+    "mocha": "^10.7.3",
+    "regenerator-runtime": "^0.14.1",
+    "rimraf": "^6.0.1",
+    "wordcut": "^0.8.2"
+  },
+  "overrides": {
+    "glob": "^9.0.0"
   }
 }
