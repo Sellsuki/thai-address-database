@@ -1,6 +1,6 @@
 {
-  "name": "thai-address-database",
-  "version": "0.0.27",
+  "name": "sellsuki-thai-address-database",
+  "version": "0.0.1",
   "description": "Thai Address Database for managing addresses in applications.",
   "main": "lib/index.js",
   "engines": {
