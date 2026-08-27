@@ -74,6 +74,27 @@ describe('Master data defects corrected (LIN-651 QA round 2)', function () {
     })
   })
 
+  it('Tambon names arriving with a "ต." label are searchable by their real name', function () {
+    const phathong = exact('ผาทอง')
+    expect(phathong.length).to.equal(1)
+    expect(phathong[0].amphoe).to.equal('ท่าวังผา')
+    expect(Number(phathong[0].zipcode)).to.equal(55140)
+
+    const nongbua = exact('หนองบัว').filter((item) => item.amphoe === 'รัษฎา')
+    expect(nongbua.length).to.equal(1)
+    expect(Number(nongbua[0].zipcode)).to.equal(92160)
+
+    expect(exact('ต.ผาทอง').length).to.equal(0)
+    expect(exact('ต.หนองบัว').length).to.equal(0)
+  })
+
+  it('Genuine dotted name จ.ป.ร. is left alone', function () {
+    const result = exact('จ.ป.ร.')
+    expect(result.length).to.equal(1)
+    expect(result[0].amphoe).to.equal('กระบุรี')
+    expect(result[0].province).to.equal('ระนอง')
+  })
+
   it('Bangkok khwaeng splits are in place', function () {
     const bangna = db.searchAddressByAmphoe('บางนา', 50)
       .filter((item) => item.province === 'กรุงเทพมหานคร')
