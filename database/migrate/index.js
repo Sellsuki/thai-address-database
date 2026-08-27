@@ -17,6 +17,32 @@ const result = excelToJson({
 })
 
 console.log('Converting ---- done !')
+
+/*
+  A few tambon names in the master data arrive with a "ต." label glued to the
+  front (e.g. "ต.ผาทอง" in อ.ท่าวังผา น่าน, "ต.หนองบัว" in อ.รัษฎา ตรัง). The
+  label is not part of the name, and it stops a customer who types the real
+  name from finding their tambon at all.
+
+  Strip that prefix here rather than in the raw workbook, so the raw file keeps
+  matching the master data drop we were given while the generated db.json stays
+  searchable. The remainder must contain no further dot, which leaves genuine
+  names like "จ.ป.ร." (อ.กระบุรี ระนอง) untouched.
+*/
+let relabeled = 0
+result.Sheet1.forEach((row) => {
+  if (typeof row.district !== 'string') {
+    return
+  }
+  const stripped = row.district.replace(/^ต\.(?=[^.]+$)/, '').trim()
+  if (stripped && stripped !== row.district) {
+    console.log('Tambon label stripped: ' + row.district + ' -> ' + stripped)
+    row.district = stripped
+    relabeled++
+  }
+})
+console.log('Tambon names relabeled ---- ' + relabeled)
+
 fs.writeFile('./database/migrate/database.json', JSON.stringify(result.Sheet1), 'utf8', function (err) {
   if (err) {
     console.log('error')
