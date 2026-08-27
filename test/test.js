@@ -20,6 +20,73 @@ describe('Prachuap Khiri Khan single zipcode (updated master data)', function ()
   })
 })
 
+// LIN-651 round 2: the master data QA rejected on 2026-07-24 has been corrected
+// upstream. These lock in the eight defects so a future master data drop cannot
+// reintroduce them.
+describe('Master data defects corrected (LIN-651 QA round 2)', function () {
+  const exact = (name) => db.searchAddressByDistrict(name, 100)
+    .filter((item) => item.district === name)
+
+  it('Tambon เวียงเหนือ in ลำปาง carries only its own name', function () {
+    const result = exact('เวียงเหนือ').filter((item) => item.province === 'ลำปาง')
+    expect(result.length).to.equal(1)
+    expect(result[0].amphoe).to.equal('เมืองลำปาง')
+    expect(Number(result[0].zipcode)).to.equal(52000)
+  })
+
+  it('Amphoe เวียงเก่า in ขอนแก่น is present with all three tambons', function () {
+    const result = db.searchAddressByAmphoe('เวียงเก่า', 50)
+    expect(result.length).to.equal(3)
+    expect(result.map((item) => item.district).sort()).to.deep.equal(
+      ['ในเมือง', 'เขาน้อย', 'เมืองเก่าพัฒนา'].sort()
+    )
+    result.forEach((item) => {
+      expect(item.province).to.equal('ขอนแก่น')
+      expect(Number(item.zipcode)).to.equal(40150)
+    })
+  })
+
+  it('Tambon สุเทพ resolves to a single zipcode 50200', function () {
+    const result = exact('สุเทพ')
+    expect(result.length).to.equal(1)
+    expect(Number(result[0].zipcode)).to.equal(50200)
+  })
+
+  it('เขตการปกครองพิเศษพัทยา is spelled correctly and present', function () {
+    const result = exact('เขตการปกครองพิเศษพัทยา')
+    expect(result.length).to.equal(1)
+    expect(result[0].amphoe).to.equal('บางละมุง')
+    expect(result[0].province).to.equal('ชลบุรี')
+    expect(Number(result[0].zipcode)).to.equal(20150)
+  })
+
+  it('Previously duplicated tambons now appear once', function () {
+    const cases = [
+      ['ท้ายบ้านใหม่', 'เมืองสมุทรปราการ', 10280],
+      ['นาข่า', 'เมืองอุดรธานี', 41000],
+      ['หนองบัว', 'พยัคฆภูมิพิสัย', 44110],
+      ['รัษฎา', 'เมืองภูเก็ต', 83000]
+    ]
+    cases.forEach(([name, amphoe, zipcode]) => {
+      const result = exact(name).filter((item) => item.amphoe === amphoe)
+      expect(result.length, name).to.equal(1)
+      expect(Number(result[0].zipcode), name).to.equal(zipcode)
+    })
+  })
+
+  it('Bangkok khwaeng splits are in place', function () {
+    const bangna = db.searchAddressByAmphoe('บางนา', 50)
+      .filter((item) => item.province === 'กรุงเทพมหานคร')
+      .map((item) => item.district)
+    expect(bangna.sort()).to.deep.equal(['บางนาเหนือ', 'บางนาใต้'].sort())
+
+    const bangbon = db.searchAddressByAmphoe('บางบอน', 50)
+      .filter((item) => item.province === 'กรุงเทพมหานคร')
+      .map((item) => item.district)
+    expect(bangbon.length).to.equal(4)
+  })
+})
+
 describe('#search', function () {
   it('searchAddressByDistrict', function () {
     let result = db.searchAddressByDistrict('อรัญประเทศ')
