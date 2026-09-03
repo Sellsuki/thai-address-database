@@ -43,6 +43,21 @@ result.Sheet1.forEach((row) => {
 })
 console.log('Tambon names relabeled ---- ' + relabeled)
 
+/*
+  The zipcode column of the workbook is numeric, so the excel reader hands it
+  back as a Number. Every release up to 0.0.30 published zipcode as a String,
+  and consumers pass the value straight into APIs that validate it as a string,
+  so keep the published type stable regardless of how the cell is stored.
+*/
+let restringed = 0
+result.Sheet1.forEach((row) => {
+  if (row.zipcode != null && typeof row.zipcode !== 'string') {
+    row.zipcode = String(row.zipcode)
+    restringed++
+  }
+})
+console.log('Zipcodes coerced to string ---- ' + restringed)
+
 fs.writeFile('./database/migrate/database.json', JSON.stringify(result.Sheet1), 'utf8', function (err) {
   if (err) {
     console.log('error')

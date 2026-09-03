@@ -108,6 +108,28 @@ describe('Master data defects corrected (LIN-651 QA round 2)', function () {
   })
 })
 
+// 0.0.31 and 0.0.32 published zipcode as a Number because the regenerated
+// workbook stores the column numerically. Consumers hand the value straight to
+// APIs that validate it as a string, so the type is part of the contract.
+describe('zipcode is published as a string', function () {
+  it('every search entry point returns a string zipcode', function () {
+    const results = [].concat(
+      db.searchAddressByDistrict('เวียงเหนือ', 20),
+      db.searchAddressByAmphoe('เมืองลำปาง', 20),
+      db.searchAddressByProvince('ลำปาง', 20),
+      db.searchAddressByZipcode('52000', 20)
+    )
+    expect(results.length).to.be.above(0)
+    results.forEach((item) => expect(item.zipcode).to.be.a('string'))
+  })
+
+  it('keeps the leading digits of a zipcode intact', function () {
+    const lampang = db.searchAddressByDistrict('เวียงเหนือ', 20)
+      .find((item) => item.province === 'ลำปาง')
+    expect(lampang.zipcode).to.equal('52000')
+  })
+})
+
 describe('#search', function () {
   it('searchAddressByDistrict', function () {
     let result = db.searchAddressByDistrict('อรัญประเทศ')
